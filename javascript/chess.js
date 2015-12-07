@@ -60,10 +60,6 @@
 				this.targetY = ty;
 			}
 		}
-	}
-	window.Chess = Chess;
-})();
-
 	//Piece methods must be implemented in the subclass
 	Piece.prototype.updateMoves = function() {
 	}
@@ -77,4 +73,7 @@
 
 	//Declaration of the pawn object
 	Pawn.prototype = new Piece();
-}
+	}
+	window.Chess = Chess;
+})();
+
