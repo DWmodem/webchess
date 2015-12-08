@@ -1,8 +1,9 @@
 //main2.sj
-var game = new Phaser.Game(1920, 1080, Phaser.CANVAS, 'gamebox', { preload: preload, create: create, update: update});
+var game = new Phaser.Game(860, 600, Phaser.CANVAS, 'gamebox', { preload: preload, create: create, update: update});
 
 function preload() {
     game.load.image('chess_1x1', '../assets/chess_1x1.png');
+    game.load.spritesheet('coin', '../assets/sprites/coin.png', 32, 32);
 }
 
 var cursors;
@@ -11,13 +12,20 @@ var layer;
 var sprite;
 
 function create() {
-	Phaser.Canvas.setSmoothingEnabled(this.game.context, false);
+
     map = game.add.tilemap();
 
     map.addTilesetImage('chess_1x1');
-    layer = map.create('level1', 40, 30, 32, 32);
-   	layer.scale = {x:3, y:3}
+    layer = map.create('level1', 40, 30, 33, 33);
+   	layer.scale = {x:2, y:2}
     layer.resizeWorld();
+	
+	game.physics.startSystem(Phaser.Physics.ARCADE);
+	sprite = game.add.sprite(32, 96, 'coin');
+	sprite.anchor.set(0.5);
+
+	game.physics.arcade.enable(sprite);
+	sprite.body.setSize(32, 32, 0, 0);
 
     cursors = game.input.keyboard.createCursorKeys();
 
@@ -33,15 +41,20 @@ function create() {
 
 function update() {
 
-    if (cursors.left.isDown)
-    {
-    }
-    else if (cursors.right.isDown)
-    {
-    }
-
     if (cursors.up.isDown)
     {
+
     }
 
 }
+
+function moveCoin(){
+
+}
+
+var de = (function(){
+	var displayEngine = function(){
+
+	}
+	return displayEngine;
+})()
