@@ -16,8 +16,8 @@ function create() {
     map = game.add.tilemap();
 
     map.addTilesetImage('chess_1x1');
-    layer = map.create('level1', 40, 30, 33, 33);
-   	layer.scale = {x:2, y:2}
+    layer = map.create('level1', 40, 30, 64, 64);
+    //layer.scale = {x:2, y:2}
     layer.resizeWorld();
 	
 	game.physics.startSystem(Phaser.Physics.ARCADE);
@@ -25,9 +25,10 @@ function create() {
 	sprite.anchor.set(0.5);
 
 	game.physics.arcade.enable(sprite);
-	sprite.body.setSize(32, 32, 0, 0);
+	sprite.body.setSize(16, 16, 0, 0);
 
     cursors = game.input.keyboard.createCursorKeys();
+    game.input.addMoveCallback(moveCoin, this);
 
 	var currentTile = 0;
 
@@ -49,7 +50,15 @@ function update() {
 }
 
 function moveCoin(){
+	if(game.input.mousePointer.isDown){
 
+		sprite.x = (16 + layer.getTileX(game.input.activePointer.worldX) * 32)*layer.scale.x;
+		sprite.y = (16 + layer.getTileY(game.input.activePointer.worldY) * 32)*layer.scale.y;
+	}
+}
+
+function coinFollowMouse(){
+	
 }
 
 var de = (function(){
