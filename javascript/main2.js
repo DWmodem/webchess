@@ -6,64 +6,80 @@ function preload() {
     game.load.spritesheet('coin', '../assets/sprites/coin.png', 32, 32);
 }
 
-var cursors;
-var map;
-var layer;
-var sprite;
 
 function create() {
-
-    map = game.add.tilemap();
-
-    map.addTilesetImage('chess_1x1');
-    layer = map.create('level1', 40, 30, 64, 64);
-    //layer.scale = {x:2, y:2}
-    layer.resizeWorld();
 	
-	game.physics.startSystem(Phaser.Physics.ARCADE);
-	sprite = game.add.sprite(32, 96, 'coin');
-	sprite.anchor.set(0.5);
-
-	game.physics.arcade.enable(sprite);
-	sprite.body.setSize(16, 16, 0, 0);
-
-    cursors = game.input.keyboard.createCursorKeys();
-    game.input.addMoveCallback(moveCoin, this);
-
-	var currentTile = 0;
-
-    for(var i = 0; i < 8; i++){
-    	for(var j = 0; j < 8; j++){
-
-    		map.putTile(((i+j) % 2), i, j, layer);
-    	}
-    }
+	de = new DisplayEngine();
+    de.createMap();
+	de.enablePhysics();
+	de.placeSprite();
+    de.enableCursors();
+    de.setActions();
+    de.createBoard();
 }
 
 function update() {
 
-    if (cursors.up.isDown)
-    {
 
-    }
-
-}
-
-function moveCoin(){
-	if(game.input.mousePointer.isDown){
-
-		sprite.x = (16 + layer.getTileX(game.input.activePointer.worldX) * 32)*layer.scale.x;
-		sprite.y = (16 + layer.getTileY(game.input.activePointer.worldY) * 32)*layer.scale.y;
-	}
 }
 
 function coinFollowMouse(){
 	
 }
 
-var de = (function(){
-	var displayEngine = function(){
 
+var DisplayEngine = function(){
+	
+	var STEP = 16;
+	var cursors;
+	var map;
+	var layer;
+	var sprite;
+
+	this.createMap = function(){
+		
+		map = game.add.tilemap();
+	    map.addTilesetImage('chess_1x1');
+	    layer = map.create('level1', 40, 30, 32, 32);
+	    layer.resizeWorld();
 	}
-	return displayEngine;
-})()
+
+	this.enablePhysics = function(){
+
+		game.physics.startSystem(Phaser.Physics.ARCADE);
+	}
+
+	this.placeSprite = function(){
+
+		sprite = game.add.sprite(32, 96, 'coin');
+		sprite.anchor.set(0.5);
+		game.physics.arcade.enable(sprite);
+		sprite.body.setSize(16, 16, 0, 0);
+	}
+
+	this.enableCursors = function(){
+		cursors = game.input.keyboard.createCursorKeys();
+	}
+
+	this.setActions = function(){
+		game.input.addMoveCallback(this.moveCoin, this);
+	}
+
+	this.createBoard = function(){
+		var currentTile = 0;
+	    for(var i = 0; i < 8; i++){
+			for(var j = 0; j < 8; j++){
+
+				map.putTile(((i+j) % 2), i, j, layer);
+			}
+		}
+	}
+	this.moveCoin = function(){
+		if(game.input.mousePointer.isDown){
+
+			sprite.x = (STEP + layer.getTileX(game.input.activePointer.worldX) * STEP*2)*layer.scale.x;
+			sprite.y = (STEP + layer.getTileY(game.input.activePointer.worldY) * STEP*2)*layer.scale.y;
+		}
+	}
+
+}
