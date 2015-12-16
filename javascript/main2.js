@@ -8,8 +8,8 @@ function preload() {
 
 
 function create() {
-	
-	de = new DisplayEngine();
+	ch = new Chess();
+	de = new DisplayEngine(ch);
     de.createMap();
 	de.enablePhysics();
 	de.placeSprite();
@@ -28,16 +28,15 @@ function coinFollowMouse(){
 }
 
 
-var DisplayEngine = function(){
-	
+var DisplayEngine = function(model){
 	var STEP = 16;
 	var cursors;
 	var map;
 	var layer;
 	var sprite;
+	var chess = model;
 
-	this.createMap = function(){
-		
+	this.createMap = function(){	
 		map = game.add.tilemap();
 	    map.addTilesetImage('chess_1x1');
 	    layer = map.create('level1', 40, 30, 32, 32);
@@ -45,12 +44,10 @@ var DisplayEngine = function(){
 	}
 
 	this.enablePhysics = function(){
-
 		game.physics.startSystem(Phaser.Physics.ARCADE);
 	}
 
 	this.placeSprite = function(){
-
 		sprite = game.add.sprite(32, 96, 'coin');
 		sprite.anchor.set(0.5);
 		game.physics.arcade.enable(sprite);
@@ -74,6 +71,7 @@ var DisplayEngine = function(){
 			}
 		}
 	}
+	
 	this.moveCoin = function(){
 		if(game.input.mousePointer.isDown){
 

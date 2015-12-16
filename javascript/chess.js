@@ -35,7 +35,7 @@
 		//If the player's king is in check, and has no valid moves, return true.
 		//Called at the start of a player's turn
 
-		Chess.prototype.Piece = function(board, player) {
+		this.Piece = function(board, player) {
 			this.owner = player;
 			this.board = board;
 			this.x;
@@ -59,20 +59,18 @@
 				this.targetX = tx;
 				this.targetY = ty;
 			}
+			
+			//Piece methods must be implemented in the subclass
+			var updateMoves = function() {
+			
+			}
+
+			//Returns true if the coords are valid for this piece
+			var isValidMove = function(x, y) {
+
+			}
 		}
-	//Piece methods must be implemented in the subclass
-	Piece.prototype.updateMoves = function() {
-	}
-
-	//Returns true if the coords are valid for this piece
-	Piece.prototype.isValidMove = function(x, y) {
-		
-	}
-
-	//Piece methods
-
-	//Declaration of the pawn object
-	Pawn.prototype = new Piece();
+		window.Piece = this.Piece;
 	}
 	window.Chess = Chess;
 })();
