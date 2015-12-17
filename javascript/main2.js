@@ -37,7 +37,7 @@ function coinFollowMouse(){
 
 
 var DisplayEngine = function(model){
-	
+
 	self = this;
 	this.STEP = 16;
 	this.cursors;
@@ -45,7 +45,7 @@ var DisplayEngine = function(model){
 	this.layer;
 	this.sprite = "test";
 
-	this.createMap = function(){
+	this.createMap = function(){	
 		map = game.add.tilemap();
 		map.addTilesetImage('chess_1x1');
 		layer = map.create('level1', 40, 30, 32, 32);
@@ -57,6 +57,7 @@ var DisplayEngine = function(model){
 	}
 
 	this.placeSprite = function(){
+
 		self.sprite = game.add.sprite(32, 96, 'coin');
 		self.sprite.anchor.set(0.5);
 		game.physics.arcade.enable(self.sprite);
@@ -80,7 +81,6 @@ var DisplayEngine = function(model){
 			}
 		}
 	}
-
 	this.moveCoin = function(){
 		if(game.input.mousePointer.isDown){
 			self.sprite.x = (self.STEP + layer.getTileX(game.input.activePointer.worldX) * self.STEP*2);
