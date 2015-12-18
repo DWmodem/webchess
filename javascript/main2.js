@@ -38,7 +38,7 @@ function coinFollowMouse(){
 
 var DisplayEngine = function(model){
 
-	self = this;
+	engine = this;
 	this.STEP = 16;
 	this.cursors;
 	this.map;
@@ -58,11 +58,11 @@ var DisplayEngine = function(model){
 
 	this.placeSprite = function(){
 
-		self.sprite = game.add.sprite(32, 96, 'coin');
-		self.sprite.anchor.set(0.5);
-		game.physics.arcade.enable(self.sprite);
-		self.sprite.body.setSize(16, 16, 0, 0);
-		console.log("self.sprite is: "+self.sprite);
+		engine.sprite = game.add.sprite(32, 96, 'coin');
+		engine.sprite.anchor.set(0.5);
+		game.physics.arcade.enable(engine.sprite);
+		engine.sprite.body.setSize(16, 16, 0, 0);
+		console.log("engine.sprite is: "+engine.sprite);
 	}
 
 	this.enableCursors = function(){
@@ -81,12 +81,14 @@ var DisplayEngine = function(model){
 			}
 		}
 	}
+
 	this.moveCoin = function(){
 		if(game.input.mousePointer.isDown){
-			self.sprite.x = (self.STEP + layer.getTileX(game.input.activePointer.worldX) * self.STEP*2);
-			self.sprite.y = (self.STEP + layer.getTileY(game.input.activePointer.worldY) * self.STEP*2);
+			engine.sprite.x = (engine.STEP + layer.getTileX(game.input.activePointer.worldX) * engine.STEP*2);
+			engine.sprite.y = (engine.STEP + layer.getTileY(game.input.activePointer.worldY) * engine.STEP*2);
 		}
 	}
+
 	this.putPiece = function (){
 
 	}
@@ -101,7 +103,5 @@ var DisplayEngine = function(model){
 
 		this.sprite = new Phaser.Sprite();
 		this.sprite.setSize(TILE_SIZE, TILE_SIZE, 0, 0);
-
-
 	}
 }
