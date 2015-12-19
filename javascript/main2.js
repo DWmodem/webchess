@@ -28,6 +28,8 @@ function update() {
 
 function render() {
 	//game.debug.spriteInfo(de.sprite, 20, 32);
+	game.debug.text('Tile X: ' + layer.getTileX(de.sprite.x), 32, 48, 'rgb(0,0,0)');
+	game.debug.text('Tile Y: ' + layer.getTileY(de.sprite.y), 32, 64, 'rgb(0,0,0)');
 
 }
 
@@ -45,16 +47,21 @@ var DisplayEngine = function(model){
 	this.layer;
 	this.sprite = "test";
 
+	this.placeSpriteOnTile = function(sprite, x, y){
+		sprite.x = engine.centerOfTileX(x);
+		sprite.y = engine.centerOfTileY(y);
+	};
+
 	this.createMap = function(){	
 		map = game.add.tilemap();
 		map.addTilesetImage('chess_1x1');
 		layer = map.create('level1', 40, 30, 32, 32);
 		layer.resizeWorld();
-	}
+	};
 
 	this.enablePhysics = function(){
 		game.physics.startSystem(Phaser.Physics.ARCADE);
-	}
+	};
 
 	this.placeSprite = function(){
 
@@ -63,15 +70,15 @@ var DisplayEngine = function(model){
 		game.physics.arcade.enable(engine.sprite);
 		engine.sprite.body.setSize(16, 16, 0, 0);
 		console.log("engine.sprite is: "+engine.sprite);
-	}
+	};
 
 	this.enableCursors = function(){
 		cursors = game.input.keyboard.createCursorKeys();
-	}
+	};
 
 	this.setActions = function(){
 		game.input.addMoveCallback(this.moveCoin, this);
-	}
+	};
 
 	this.createBoard = function(){
 		var currentTile = 0;
@@ -80,18 +87,28 @@ var DisplayEngine = function(model){
 				map.putTile(((i+j) % 2), i, j, layer);
 			}
 		}
-	}
+	};
 
 	this.moveCoin = function(){
 		if(game.input.mousePointer.isDown){
-			engine.sprite.x = (engine.STEP + layer.getTileX(game.input.activePointer.worldX) * engine.STEP*2);
-			engine.sprite.y = (engine.STEP + layer.getTileY(game.input.activePointer.worldY) * engine.STEP*2);
+			engine.placeSpriteOnTile(	engine.sprite, 
+										game.input.activePointer.worldX, 
+										game.input.activePointer.worldY);
+			console.log("moveCoin");
 		}
-	}
+	};
+
+	this.centerOfTileX = function (pixelX){
+		return (engine.STEP + layer.getTileX(pixelX) * engine.STEP*2);
+	};
+
+	this.centerOfTileY = function (pixelY){
+		return (engine.STEP + layer.getTileY(pixelY) * engine.STEP*2);
+	};
 
 	this.putPiece = function (){
 
-	}
+	};
 
 	this.pieceSprite = function(){
 		this.initialX = 0;
@@ -103,5 +120,5 @@ var DisplayEngine = function(model){
 
 		this.sprite = new Phaser.Sprite();
 		this.sprite.setSize(TILE_SIZE, TILE_SIZE, 0, 0);
-	}
-}
+	};
+};
