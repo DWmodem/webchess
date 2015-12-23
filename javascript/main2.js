@@ -3,7 +3,8 @@
 // colored tiles http://phaser.io/examples/v2/tilemaps/tileset-from-bitmapdata
 
 var TILE_SIZE = 16;
-var game = new Phaser.Game(860, 600, Phaser.CANVAS, 'gamebox', { preload: preload, create: create, update: update, render: render});
+var game = new Phaser.Game(	860, 600, Phaser.CANVAS, 'gamebox', 
+							{preload: preload, create: create, update: update, render: render});
 
 function preload() {
     game.load.image('chess_1x1', '../assets/chess_1x1.png');
@@ -23,29 +24,35 @@ function create() {
 
 function update() {
 
-
 }
 
 function render() {
 	//game.debug.spriteInfo(de.sprite, 20, 32);
 	game.debug.text('Tile X: ' + layer.getTileX(de.sprite.x), 32, 48, 'rgb(0,0,0)');
 	game.debug.text('Tile Y: ' + layer.getTileY(de.sprite.y), 32, 64, 'rgb(0,0,0)');
-
 }
 
 function coinFollowMouse(){
-	
+
 }
 
 
 var DisplayEngine = function(model){
 
-	engine = this;
+	//
+	//Attributes
+	//
+
+	var engine = this;
 	this.STEP = 16;
-	this.cursors;
-	this.map;
-	this.layer;
+	this.cursors = null;
+	this.map = null;
+	this.layer = null;
 	this.sprite = "test";
+
+	//
+	//Public Methods
+	//
 
 	this.placeSpriteOnTile = function(sprite, x, y){
 		sprite.x = engine.centerOfTileX(x);
@@ -64,7 +71,6 @@ var DisplayEngine = function(model){
 	};
 
 	this.placeSprite = function(){
-
 		engine.sprite = game.add.sprite(32, 96, 'coin');
 		engine.sprite.anchor.set(0.5);
 		game.physics.arcade.enable(engine.sprite);
@@ -121,4 +127,10 @@ var DisplayEngine = function(model){
 		this.sprite = new Phaser.Sprite();
 		this.sprite.setSize(TILE_SIZE, TILE_SIZE, 0, 0);
 	};
+
+	//
+	//Object architecture
+	//
+
+	//  ¯\_(ツ)_/¯
 };
