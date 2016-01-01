@@ -42,7 +42,6 @@ var DisplayEngine = function(model){
 	//
 	//Attributes
 	//
-
 	var engine = this;
 	this.STEP = 16;
 	this.cursors = null;
@@ -97,7 +96,7 @@ var DisplayEngine = function(model){
 
 	this.moveCoin = function(){
 		if(game.input.mousePointer.isDown){
-			engine.placeSpriteOnTile(	engine.sprite, 
+			engine.placeSpriteOnTile(	engine.sprite,
 										game.input.activePointer.worldX, 
 										game.input.activePointer.worldY);
 			console.log("moveCoin");
