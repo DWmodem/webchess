@@ -8,8 +8,7 @@
 		//
 		var selfChess = this;
 		this.players = [];
-		this.board = new Board(); //Board model
-		this.ch_init();
+		this.board = null;
 
 		//
 		//Public methods
@@ -22,7 +21,7 @@
 		//Private methods
 		//
 		this.ch_init = function(){ //Call this on object creation
-
+			selfChess.board = new selfChess.Board(); //Board model
 		};
 
 		this.createPlayer = function(name){
@@ -53,7 +52,11 @@
 			//
 			//Object types
 			//
-
+			
+		//
+		// Initialization Code
+		//
+		this.ch_init();
 
 		};
 
