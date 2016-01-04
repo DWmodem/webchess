@@ -13,19 +13,20 @@
 		//
 		//Public methods
 		//
-		this.createPiece = function(){
-			var theNewPiece = new Piece(board);
-		};
 
 		//
 		//Private methods
 		//
-		this.ch_init = function(){ //Call this on object creation
+
+		//Called on object creation. Takes care of object attribute initialization, and other init code.
+		this.ch_init = function(){ 
 			selfChess.board = new selfChess.Board(); //Board model
+			selfChess.createPlayer('white');
+			selfChess.createPlayer('black');
 		};
 
 		this.createPlayer = function(name){
-			selfChess.players.push(new Player(name));
+			selfChess.players.push(new selfChess.Player(name));
 		};
 
 		//
@@ -52,12 +53,10 @@
 			//
 			//Object types
 			//
-			
-		//
-		// Initialization Code
-		//
-		this.ch_init();
 
+			//
+			// Initialization
+			//
 		};
 
 		this.Board = function() {
@@ -73,17 +72,27 @@
 
 			//Move the piece to the coordinates, if able.
 			this.move = function(piece, x, y){
-
+				//If unable to move
+				if(!piece.move(x, y)){
+					return false;
+				}
+				return true;
 			};
 
-			this.placePieceAt = function(x, y){
+			//Returns an eaten piece if one is eaten
+			this.placePieceAt = function(piece, x, y){
+				var targetSpacePiece = selfBoard.removePieceAt(x, y);
+				piece.placeAt(x, y);
 				selfBoard.updateAllMoves();
+				return targetSpacePiece;
 			};
 
+			//Returns the piece
 			this.removePieceAt = function(x, y){
 				var piece = selfBoard.tiles[x][y].remove();
 				selfBoard.tiles[x][y] = null;
 				selfBoard.updateAllMoves();
+				return piece;
 			};
 			//
 			//Private Methods
@@ -105,7 +114,10 @@
 			//
 			//Object types
 			//
-			
+
+			//
+			// Initialization
+			//			
 		};
 		
 		//VerifyCheck will create a board where the move is done.
@@ -125,7 +137,8 @@
 			this.y = 0;
 			this.moves = [];	//Array move objects. 
 			this.eats = [];
-
+			this.states = {idle: 'idle', selected: 'selected', hover: 'hover'};
+			this.currentState = states.idle;
 			//
 			//Public Methods
 			//
@@ -137,6 +150,26 @@
 				var eatenPiece = selfPiece.implMovement(mvmt);
 			};
 
+			//Place as a brand new fresh piece. Override existing attributes
+			this.placeAt = function(x, y, board, player){
+				//If there is a valid board argument
+				var boardIsNull = (board === null);
+				if(!boardIsNull){
+					selfPiece.board = board;
+				}
+				
+				//If there is a valid player argument
+				var playerIsNull = (player === null);
+				if(!playerIsNull){
+					selfPiece.owner = player;
+				}
+
+				selfPiece.x = x;
+				selfPiece.y = y;
+				this.moves = [];
+				this.eats = [];
+			};
+
 			//Remove this piece from board, return a reference to it.
 			this.remove = function(){
 				selfPiece.board = null;
@@ -144,6 +177,7 @@
 				selfPiece.y = -1;
 				selfPiece.moves = [];
 				selfPiece.eats = [];
+				return selfPiece;
 			};
 
 			//
@@ -153,10 +187,9 @@
 			
 			};
 
+			//Returns the movement if able, otherwise false
 			this.getMovement = function(x, y){
-				if(!selfPiece.isValidMove(x, y)){
-					return false;
-				}
+				return selfPiece.isValidMove(x, y);
 			};
 
 			//Implements a movement
@@ -181,7 +214,7 @@
 				for(var i = 0; i < selfPiece.moves.length; i++){
 					currMovement = selfPiece.moves[i];
 					if((currMovement.x == x) && (currMovement.y == y)){	//If both coords match
-						return true;									//then we have the move in our array. Return true.
+						return selfPiece.moves[i];						//then we have the move in our array. Return true.
 					}
 				}
 
@@ -189,7 +222,7 @@
 				for(var j = 0; j < selfPiece.eats.length; j++){
 					currMovement = selfPiece.eats[j];
 					if((currMovement.x == x) && (currMovement.y == y)){	//If both coords match
-						return true;									//then we have the eat in our array. Return true.
+						return selfPiece.eats[j];						//then we have the eat in our array. Return true.
 					}
 				}
 
@@ -215,7 +248,16 @@
 				this.targetX = tx;
 				this.targetY = ty;
 			};
+			//
+			// Initialization
+			//			
 		};
+
+		//
+		// Initialization (Chess)
+		//
+		this.ch_init();
+
 	};
 	window.Chess = Chess;
 })();

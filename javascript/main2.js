@@ -53,6 +53,10 @@ var DisplayEngine = function(model){
 	//Public Methods
 	//
 
+	//
+	//Private Methods
+	//
+
 	this.placeSpriteOnTile = function(sprite, x, y){
 		sprite.x = engine.centerOfTileX(x);
 		sprite.y = engine.centerOfTileY(y);
