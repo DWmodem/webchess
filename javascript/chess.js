@@ -9,11 +9,14 @@
 		var selfChess = this;
 		this.players = [];
 		this.board = null;
+		this.currentPlayer = null;
 
 		//
 		//Public methods
 		//
-
+		this.startGame = function(){
+			this.currentPlayer = this.players[0];
+		};
 		//
 		//Private methods
 		//

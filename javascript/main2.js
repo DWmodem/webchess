@@ -9,17 +9,12 @@ var game = new Phaser.Game(	860, 600, Phaser.CANVAS, 'gamebox',
 function preload() {
     game.load.image('chess_1x1', '../assets/chess_1x1.png');
     game.load.spritesheet('coin', '../assets/sprites/coin.png', 32, 32);
+    game.load.bitmapFont('carrier_command', '../assets/fonts/carrier_command.png', '../assets/fonts/carrier_command.xml');
 }
 
 function create() {
 	ch = new Chess();
 	de = new DisplayEngine(ch);
-	de.createMap();
-	de.enablePhysics();
-	de.placeSprite();
-	de.enableCursors();
-	de.setActions();
-	de.createBoard();
 }
 
 function update() {
@@ -32,11 +27,6 @@ function render() {
 	game.debug.text('Tile Y: ' + layer.getTileY(de.sprite.y), 32, 64, 'rgb(0,0,0)');
 }
 
-function coinFollowMouse(){
-
-}
-
-
 var DisplayEngine = function(model){
 
 	//
@@ -48,21 +38,46 @@ var DisplayEngine = function(model){
 	this.map = null;
 	this.layer = null;
 	this.sprite = "test";
+	//Indicator to show whose turn it is
+	this.turnIndicator = null;
+
+	//The state of the chess game resides in here
+	this.chm = model;
+	var chm = this.chm;	//Give it a global ref for convenience
+	// All hail the state of the chess game
 
 	//
 	//Public Methods
 	//
+	
+	//Chess game primal methods
+	this.startGame = function(){
+		chm.startGame();
+		engine.turnIndicator.setCurrentPlayer(chm.currentPlayer);
+	};
+	// End chess game primal methods
 
 	//
 	//Private Methods
 	//
-
+	this.en_init = function(){
+		engine.createMap();
+		engine.enablePhysics();
+		engine.placeSprite();
+		engine.enableCursors();
+		engine.setActions();
+		engine.createBoard();
+		this.turnIndicator = new engine.TurnIndicator();
+	};
+	//
+	//Utility Methods
+	//
 	this.placeSpriteOnTile = function(sprite, x, y){
 		sprite.x = engine.centerOfTileX(x);
 		sprite.y = engine.centerOfTileY(y);
 	};
 
-	this.createMap = function(){	
+	this.createMap = function(){
 		map = game.add.tilemap();
 		map.addTilesetImage('chess_1x1');
 		layer = map.create('level1', 40, 30, 32, 32);
@@ -134,6 +149,12 @@ var DisplayEngine = function(model){
 	//
 	//Object architecture
 	//
-
+	this.TurnIndicator = function(){
+		this.text = game.add.bitmapText(10, 100, 'carrier_command', 'Do stuff!', 34);
+		this.text.tint = 0x223344;
+		this.text.inputEnabled = true;
+		this.text.input.enableDrag();
+	};
 	//  ¯\_(ツ)_/¯
+	this.en_init();
 };
